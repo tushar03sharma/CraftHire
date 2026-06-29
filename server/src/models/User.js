@@ -8,11 +8,10 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Hash password before saving — runs automatically on every save()
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next(); // skip if password unchanged
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return; // skip if password unchanged
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 // Instance method to compare entered password vs hashed one
